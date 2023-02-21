@@ -11,6 +11,10 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 dotenv.config()
 
+app.get("/",(req,res)=>{
+    res.send("hello")
+})
+
 mongoose.connect("mongodb+srv://yogesh_beldar:Oh9CU4nZCayFGTeC@cluster0.zveoo.mongodb.net/project5"
   )
   .then(() => console.log("MongoDb is connected"))

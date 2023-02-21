@@ -1,7 +1,37 @@
 const Book = require("../models/bookModel");
 const User = require("../models/userModel");
 
+// const aws = require("aws-sdk");
+
 const { isValid, isValidString, isValidObjectId, isValidISBN, isValidDate } = require("../middleware/validation");
+
+//================================================[Upload File Function -AWS]=======================================================================
+
+// aws.config.update({
+//   accessKeyId: "AKIAY3L35MCRVFM24Q7U",
+//   secretAccessKey: "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",
+//   region: "ap-south-1",
+// });
+
+// let uploadFile = async (file) => {
+//   return new Promise(function (resolve, reject) {
+//     let s3 = new aws.S3({ apiVersion: "2006-03-01" });
+
+//     var uploadParams = {
+//       ACL: "public-read",
+//       Bucket: "classroom-training-bucket",
+//       Key: "abc/" + file.originalname,
+//       Body: file.buffer,
+//     };
+
+//     s3.upload(uploadParams, function (err, data) {
+//       if (err) {
+//         return reject({ error: err });
+//       }
+//       return resolve(data.Location);
+//     });
+//   });
+// };
 const createBook = async function (req, res) {
   try {
     let data = req.body;
@@ -9,7 +39,7 @@ const createBook = async function (req, res) {
 
     console.log(data)
 
-    if (Object.keys(data).length < 1) {
+    if (Object.keys(data).length === 0) {
       return res
         .status(400)
         .send({ status: false, message: "Insert Data : BAD REQUEST" });
@@ -76,6 +106,12 @@ const createBook = async function (req, res) {
       return res
         .status(400)
         .send({ status: false, message: "User Id do not exists" });
+
+        let files=req.files
+    if (!(files&&files.length)) {
+        return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });}
+    const uploadedBookImage = await uploadFile(files[0])
+    data.bookImage=uploadedBookImage
 
     let savedData = await Book.create(data);
     console.log(savedData)
