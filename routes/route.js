@@ -13,7 +13,7 @@ router.post("/login", authUser.authUser);
 
 
 router.post("/books" ,authMiddleware.protect,bookController.createBook)
-router.get("/books/:bookId",bookController.getAllBook)
+router.get("/books",authMiddleware.protect,bookController.getBooksData)
 router.put("/books/:bookId",authMiddleware.protect,bookController.updatedBook)
 router.delete("/books/:bookId",authMiddleware.protect,bookController.deleteBookId)
 

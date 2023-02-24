@@ -1,37 +1,8 @@
 const Book = require("../models/bookModel");
 const User = require("../models/userModel");
 
-// const aws = require("aws-sdk");
-
 const { isValid, isValidString, isValidObjectId, isValidISBN, isValidDate } = require("../middleware/validation");
 
-//================================================[Upload File Function -AWS]=======================================================================
-
-// aws.config.update({
-//   accessKeyId: "AKIAY3L35MCRVFM24Q7U",
-//   secretAccessKey: "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",
-//   region: "ap-south-1",
-// });
-
-// let uploadFile = async (file) => {
-//   return new Promise(function (resolve, reject) {
-//     let s3 = new aws.S3({ apiVersion: "2006-03-01" });
-
-//     var uploadParams = {
-//       ACL: "public-read",
-//       Bucket: "classroom-training-bucket",
-//       Key: "abc/" + file.originalname,
-//       Body: file.buffer,
-//     };
-
-//     s3.upload(uploadParams, function (err, data) {
-//       if (err) {
-//         return reject({ error: err });
-//       }
-//       return resolve(data.Location);
-//     });
-//   });
-// };
 const createBook = async function (req, res) {
   try {
     let data = req.body;
@@ -107,11 +78,7 @@ const createBook = async function (req, res) {
         .status(400)
         .send({ status: false, message: "User Id do not exists" });
 
-        let files=req.files
-    if (!(files&&files.length)) {
-        return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });}
-    const uploadedBookImage = await uploadFile(files[0])
-    data.bookImage=uploadedBookImage
+  
 
     let savedData = await Book.create(data);
     console.log(savedData)
@@ -121,29 +88,80 @@ const createBook = async function (req, res) {
   }
 };
 
-const getAllBook = async function (req, res) {
+// const getAllBook = async function (req, res) {
 
+//   try {
+//      const queryParams = req.query
+//     console.log(queryParams)
+//     if (queryParams.userId && !queryParams.userId.match(/^[0-9a-fA-F]{24}$/)) {
+//       return res.status(400).send({ status: false, message: "Incorrect userId" })
+//     }
+
+//     const books = await Book.find({ ...queryParams, isDeleted: false }).sort({ title: 1 }).select('_id title excerpt userId  releasedAt')
+//     books.sort((a, b) => a.title.localeCompare(b.title))  // enables case - insenstive and then sort the array
+
+//     if (books && books.length == 0) {
+//       return res.status(404).send({ status: false, message: "Books not found" })
+//     }
+//     return res.status(200).send({ status: true, message: "Books list", data: books })
+
+//   }
+//   catch (error) {
+//     return res.status(500).send({ status: false, message: error.message })
+
+//   }
+// }
+
+const getBooksData = async function (req, res) {
   try {
+    let data = req.query;
+    let { _id, userId } = data;
+    let bookData = { isDeleted: false };
 
-    const queryParams = req.query
-    if (queryParams.userId && !queryParams.userId.match(/^[0-9a-fA-F]{24}$/)) {
-      return res.status(400).send({ status: false, message: "Incorrect userId" })
+    if (Object.keys(data).length == 0) {
+      getBooks = await Book
+        .find({ data, isDeleted: false })
+        // .select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1, })
+        .sort({ title: 1 })
+        .populate("userId");
+      return res.status(200).send({
+        status: true,
+        message: "Books list",
+        length: getBooks.length,
+        data: getBooks,
+      });
     }
 
-    const books = await Book.find({ ...queryParams, isDeleted: false }).sort({ title: 1 }).select('_id title excerpt userId  releasedAt')
-    books.sort((a, b) => a.title.localeCompare(b.title))  // enables case - insenstive and then sort the array
-
-    if (books && books.length == 0) {
-      return res.status(404).send({ status: false, message: "Books not found" })
+    if (data.userId) {
+      if (!isValidObjectId(data.userId)) {
+        return res
+          .status(400)
+          .send({ status: false, message: "Invalid userId in params" });
+      }
     }
-    return res.status(200).send({ status: true, message: "Books list", data: books })
+    if (_id) {
+      bookData._id = _id;
+    }
+    if (userId) {
+      bookData.userId = userId;
+    }
 
-  }
-  catch (error) {
-    return res.status(500).send({ status: false, message: error.message })
+    let books = await Book
+      .find(bookData)
+      // .select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, subcategory: 1, reviews: 1, releasedAt: 1, })
+      .sort({ title: 1 })
+      .populate("userId");
 
+    if (books.length == 0)
+      return res.status(404).send({ status: false, message: "No data found" });
+    else
+      return res
+        .status(200)
+        .send({ status: true, message: "Books list", data: books });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
-}
+};
 
 
 const updatedBook = async function (req, res) {
@@ -290,4 +308,4 @@ const deleteBookId = async function (req, res) {
 };
 
 
-module.exports = { createBook, getAllBook, updatedBook, deleteBookId }
+module.exports = { createBook, getBooksData, updatedBook, deleteBookId }
