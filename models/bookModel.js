@@ -3,9 +3,6 @@ const objectId = mongoose.Schema.Types.ObjectId
 
 const bookSchema = new mongoose.Schema({
 
-    cover:{
-        type:String
-    },
     title: {
         type: String,
         required: true,
@@ -27,10 +24,6 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true,
         unqiue: true, trim: true
-    },
-    bookImage:{
-        type:String,
-        // required:true
     },
    
     deletedAt: {

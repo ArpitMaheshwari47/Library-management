@@ -8,18 +8,15 @@ const registerUser = async (req, res) => {
     let data = req.body
     const { title, userName, email, password, phone } = data
 
-    // console.log(req.body)
-
-    if (!title || !userName || !email || !password || !phone) {
-      return res.status(400).send({ status: false, message: "Please Enter all the Feilds" });
-
+    if (Object.keys(data).length === 0) {
+      return res
+        .status(400)
+        .send({ status: false, message: "Insert Data : BAD REQUEST" });
     }
     if (!isValid(title)) {
       return res.status(400).send({ status: false, message: "plz enter your firstName" })
     }
 
-
-    //******************************************************EMAIL VALIDATION************************************************************ */        
     if (!isValid(email)) {
       return res.status(400).send({ status: false, message: "plz enter the emailId" })
 
@@ -33,8 +30,6 @@ const registerUser = async (req, res) => {
       return res.status(400).send({ status: false, message: "emailId is already in use" })
 
     }
-
-    //***************************************************************************PHONE VALIDATION********************************************************* */
 
     if (!isValid(phone)) {
       return res.status(400).send({ status: false, message: "plz enter phone number" })
