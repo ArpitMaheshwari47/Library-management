@@ -7,7 +7,7 @@ const authMiddleware= require("../middleware/authMiddleware");
 
 
 router.post("/books" ,authMiddleware.protect,bookController.createBook)
-router.get("/books",authMiddleware.protect,bookController.getBooksData)
+router.get("/books",bookController.getBooksData)
 router.put("/books/:bookId",authMiddleware.protect,bookController.updatedBook)
 router.delete("/books/:bookId",authMiddleware.protect,bookController.deleteBook)
 
