@@ -1,0 +1,51 @@
+[
+    {
+        "title":"The Great Indian Novel",
+        "excerpt":"good book",
+        "userId":"63fb778a65506820902cb393",
+        "ISBN":"9781628721591",
+        "releasedAt":"1997-02-12"
+    },
+    {
+        "title":"The Secret",
+        "excerpt":"good book",
+        "userId":"63fb778a65506820902cb393",
+        "ISBN":"9780731815296",
+        "releasedAt":"2001-06-12"
+    },
+    {
+        "title":"The Magic",
+        "excerpt":"good book",
+        "userId":"63fb778a65506820902cb393",
+        "ISBN":"9781451673456,",
+        "releasedAt":"1996-12-22"
+    },
+    {
+        "title":"Wings of Fire",
+        "excerpt":"good book",
+        "userId":"63fb778a65506820902cb393",
+        "ISBN":"9788173711466",
+        "releasedAt":"2000-02-11"
+    },
+    {
+        "title":"Half Girlfriend",
+        "excerpt":"good book",
+        "userId":"63fb778a65506820902cb393",
+        "ISBN":"9788129135728",
+        "releasedAt":"2002-04-17"
+    },
+    {
+        "title":"A History of Ancient and Early Medieval India",
+        "excerpt":"good book",
+        "userId":"63fb778a65506820902cb393",
+        "ISBN":"9788131711200",
+        "releasedAt":"2012-06-15"
+    },
+    {
+        "title":"History of Ancient India",
+        "excerpt":"good book",
+        "userId":"63fb778a65506820902cb393",
+        "ISBN":"9788120800175",
+        "releasedAt":"2000-02-10"
+    }
+]
