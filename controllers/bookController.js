@@ -92,8 +92,7 @@ const getBooksData = async function (req, res) {
     if (Object.keys(data).length == 0) {
       getBooks = await Book
         .find({ data, isDeleted: false })
-        .sort({ title: 1 })
-        .populate("userId");
+        .sort({ title: 1 }).pretty();
       return res.status(200).send({
         status: true,
         message: "Books list",
